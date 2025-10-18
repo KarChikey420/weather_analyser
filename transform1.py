@@ -1,6 +1,22 @@
 import pandas as pd
 
-df=pd.read_csv("weather_data.csv")
+def transform_raw(all_data):
+    data=[]
+    for city ,city_data in all_data.items():
+        if city is not None:
+            for forecast in city_data['forecast']:
+                data.append({
+                    'city':city_data['city_name'],
+                    'country':city_data['country'],
+                    'datetime': forecast['datetime'],
+                    'temperature': forecast['temperature'],
+                    'humidity': forecast['humidity'],
+                    'weather': forecast['weather'],
+                    'description': forecast['description'],
+                    'wind_speed': forecast['wind_speed']
+                })
+    df=pd.DataFrame(data)
+    return df
 
 def transform(df):
     df['datetime'] = pd.to_datetime(df['datetime'])
@@ -36,7 +52,3 @@ def transform(df):
     })
     
     return df1
-
-if __name__=="__main__":
-    df=transform(df)
-    df.to_csv("transformed_weather_data.csv",index=False)

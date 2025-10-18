@@ -1,5 +1,4 @@
 venv
 .env
-weather_data.csv
 __pycache__
-transformed_weather_data.csv
+data/
