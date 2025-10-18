@@ -1,40 +1,24 @@
 import boto3
+import os
+from dotenv import load_dotenv
 from datetime import datetime
 
-def upload_to_s3(file_name, bucket_name):
-    """
-    Upload a CSV file to Amazon S3 with date-based naming.
-    """
-    # Initialize S3 client
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id='YOUR_AWS_ACCESS_KEY',
-        aws_secret_access_key='YOUR_AWS_SECRET_KEY',
-        region_name='ap-south-1'
-    )
+load_dotenv()
 
-    # Create a date-based filename
+def load_data_to_s3(file_path, bucket_name, s3_key=None):
     current_date = datetime.now().strftime("%Y-%m-%d")
-    object_name = f"transformed/{current_date}_weather_data.csv"
-
-    # Upload the file
-    s3.upload_file(file_name, bucket_name, object_name)
-    print(f"✅ Uploaded {file_name} → s3://{bucket_name}/{object_name}")
-
-# Example usage
-upload_to_s3("data/transformed_weather.csv", "weather-data-kartikey")
-
-
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:*",
-                "s3-object-lambda:*"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
+    if not s3_key:
+       s3_key = f"transformed/{current_date}_weather_data.csv"
+    
+    s3=boto3.client(
+        "s3",
+        aws_access_key_id=os.getenv("ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("SECRET_KEY"),
+        region_name=os.getenv("AWS_REGION")   
+    )
+    try:
+        s3.upload_file(file_path,bucket_name,s3_key)
+        print(f"File {file_path} uploaded to s3://{bucket_name}/{s3_key}")
+    except Exception as e:
+        print(f"error{e}")
+        
