@@ -1,11 +1,19 @@
 from Extract_api import Extract_Api
 from transform1 import transform,transform_raw
 from load import load_data_to_s3
+from s3_to_redsift import load_data_to_redshift
 from datetime import datetime
 import os
 
 API_KEY=os.getenv("Weather_Api")
 Bucket_Name=os.getenv("AWS_BUCKET")
+REDSHIFT_HOST=os.getenv("REDSHIFT_HOST")
+REDSHIFT_DB=os.getenv("REDSHIFT_DB")
+REDSHIFT_USER=os.getenv("REDSHIFT_USER")
+REDSHIFT_PASSWORD=os.getenv("REDSHIFT_PASSWORD")
+REDSHIFT_PORT=int(os.getenv("REDSHIFT_PORT"))
+S3_BUCKET=os.getenv("S3_BUCKET")
+IAM_ROLE_ARN=os.getenv("IAM_ROLE_ARN")
 
 def main():
    city_name=["Delhi", "Mumbai", "Dehradun", "Lucknow", "Chandigarh"]
