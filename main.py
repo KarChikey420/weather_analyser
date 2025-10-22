@@ -7,13 +7,14 @@ import os
 
 API_KEY=os.getenv("Weather_Api")
 Bucket_Name=os.getenv("AWS_BUCKET")
-REDSHIFT_HOST=os.getenv("REDSHIFT_HOST")
+REDSHIFT_HOST=os.getenv("REDSHIFT_HOST").split(":")[0]
 REDSHIFT_DB=os.getenv("REDSHIFT_DB")
 REDSHIFT_USER=os.getenv("REDSHIFT_USER")
 REDSHIFT_PASSWORD=os.getenv("REDSHIFT_PASSWORD")
-REDSHIFT_PORT=int(os.getenv("REDSHIFT_PORT"))
-S3_BUCKET=os.getenv("S3_BUCKET")
+REDSHIFT_PORT=int(os.getenv("REDSHIFT_PORT",5439))
 IAM_ROLE_ARN=os.getenv("IAM_ROLE_ARN")
+TABLE_NAME=os.getenv("TABLE_NAME")
+REGION=os.getenv("REGION")
 
 def main():
    city_name=["Delhi", "Mumbai", "Dehradun", "Lucknow", "Chandigarh"]
@@ -38,7 +39,23 @@ def main():
    print(f"File saved locally at: {file_path}")
 
    print("Uploading to S3...")
-   load_data_to_s3(file_path, Bucket_Name)
+   s3_key=load_data_to_s3(file_path, Bucket_Name)
+   print("s3 key:",s3_key)
+   
+   if s3_key:
+       print("Loading data into Redshift...")
+       load_data_to_redshift(
+           table_name=TABLE_NAME,
+           s3_bucket=Bucket_Name,
+           s3_key=s3_key,
+           iam_role_arn=IAM_ROLE_ARN,
+           host=REDSHIFT_HOST,
+           dbname=REDSHIFT_DB,
+           user=REDSHIFT_USER,
+           password=REDSHIFT_PASSWORD,
+           port=REDSHIFT_PORT,
+           region=REGION
+       )
 
    print("ETL pipeline completed successfully!")
 

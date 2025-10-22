@@ -11,8 +11,10 @@ def load_data_to_redshift(table_name: str,
                           port: int = 5439,
                           region: str = "ap-south-1"):
     
+    conn = None
+    cursor = None
     s3_path = f"s3://{s3_bucket}/{s3_key}"
-    
+
     try:
         conn = psycopg2.connect(
             dbname=dbname,
