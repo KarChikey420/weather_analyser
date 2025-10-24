@@ -14,7 +14,7 @@ REDSHIFT_PASSWORD=os.getenv("REDSHIFT_PASSWORD")
 REDSHIFT_PORT=int(os.getenv("REDSHIFT_PORT",5439))
 IAM_ROLE_ARN=os.getenv("IAM_ROLE_ARN")
 TABLE_NAME=os.getenv("TABLE_NAME")
-REGION=os.getenv("REGION")
+REGION=os.getenv("AWS_REGION")
 
 def main():
    city_name=["Delhi", "Mumbai", "Dehradun", "Lucknow", "Chandigarh"]
