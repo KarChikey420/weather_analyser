@@ -1,14 +1,1 @@
-import psycopg2
-
-try:
-    conn = psycopg2.connect(
-        host="kartik.220402651988.ap-south-1.redshift-serverless.amazonaws.com",
-        port=5432,
-        dbname="dev",
-        user="admin",
-        password="Morning0000",
-        sslmode='require'
-    )
-    print("✅ Connection successful!")
-except Exception as e:
-    print("❌ Connection failed:", e)
+lll
