@@ -68,7 +68,7 @@ weather_analyser/
 └── README.md
 
 # Configuration
-Use a .env or config.yaml file for API and AWS credentials:
+Use a .env file for API and AWS credentials:
 
 API_KEY=your_weather_api_key
 AWS_ACCESS_KEY=your_aws_access_key
