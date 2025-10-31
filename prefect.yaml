@@ -1,0 +1,32 @@
+# Welcome to your prefect.yaml file! You can use this file for storing and managing
+# configuration for deploying your flows. We recommend committing this file to source
+# control along with your flow code.
+
+# Generic metadata about this project
+name: weather_analyser
+prefect-version: 3.4.25
+
+# build section allows you to manage and build docker images
+build: null
+
+# push section (if running locally)
+push:
+- prefect.deployments.steps.set_working_directory:
+    directory: weather_analyser
+
+# pull section (if running locally)
+pull:
+- prefect.deployments.steps.set_working_directory:
+    directory: weather_analyser
+
+# deployment section
+deployments:
+- name: weather_analyser
+  description: "Fetch weather data daily and load it to AWS Redshift"
+  schedule:
+    interval: 86400  # Every 24 hours
+  flow_name: Weather_ETL_Pipeline
+  entrypoint: weather_analyser/main.py:weather_etl_flow
+  parameters: {}
+  work_pool:
+    name: default-agent-pool
