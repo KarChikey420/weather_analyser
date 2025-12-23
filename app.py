@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Request,logger
+from fastapi import FastAPI, HTTPException, Request
+import logging
 from pydantic import BaseModel
 import uvicorn
 from dotenv import load_dotenv
@@ -9,7 +10,7 @@ from load import upload_df_to_s3
 from s3_to_redsift import load_data_to_redshift
 
 
-app=FastAPI("Weather ETL API")
+app=FastAPI()
 
 load_dotenv()
 
@@ -35,17 +36,17 @@ def etl_process(request: WheatherRequest):
             return {"status": "error", "message": "One or more environment variables are missing."}
         
         raw_data= Extract_Api(request.city_names, API_KEY)
-        logger.info("Data extraction completed.")
+        logging.info("Data extraction completed.")
         df_raw = transform_raw(raw_data)
-        logger.info("Raw data transformation completed.")
+        logging.info("Raw data transformation completed.")
         df_clean = transform(df_raw)
-        logger.info("Data cleaning transformation completed.")
+        logging.info("Data cleaning transformation completed.")
         
         s3_key = upload_df_to_s3(
             df=df_clean,
             bucket_name=Bucket_Name
         )
-        logger.info("Data uploaded to S3.")
+        logging.info("Data uploaded to S3.")
         
         load_data_to_redshift(
             table_name=request.table_name,
@@ -59,7 +60,7 @@ def etl_process(request: WheatherRequest):
             port=REDSHIFT_PORT,
             region=REGION
         )
-        logger.info("Data loaded to Redshift.")
+        logging.info("Data loaded to Redshift.")
         
         return {
             "status": "success",

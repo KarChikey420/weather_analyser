@@ -1,7 +1,7 @@
 from prefect import flow, task
 from Extract_api import Extract_Api
 from transform1 import transform, transform_raw
-from load import load_data_to_s3
+from load import upload_df_to_s3
 from s3_to_redsift import load_data_to_redshift
 from datetime import datetime
 import os
@@ -41,7 +41,7 @@ def save_and_upload(df):
     file_path = os.path.join(folder_path, file_name)
     df.to_csv(file_path, index=False)
     print(f"✅ File saved: {file_path}")
-    s3_key = load_data_to_s3(file_path, Bucket_Name)
+    s3_key = upload_df_to_s3(df, Bucket_Name)
     return s3_key
 
 @task
