@@ -85,4 +85,3 @@ REDSHIFT_PASSWORD=my_password
 Kartikey Negi — Project Creator
 AWS & OpenWeatherMap for data and storage services
 The Python open-source community for amazing libraries
-Inspired by modern Data Engineering ETL architectures
